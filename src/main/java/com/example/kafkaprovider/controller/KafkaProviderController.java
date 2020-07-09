@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+import com.example.kafkaprovider.model.Event;
 import com.example.kafkaprovider.service.KafkaProviderService;
 
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ public class KafkaProviderController {
         logger.info(String.format("Received event - name: '%s', data: '%s'", eventName, eventData));
 
         // Call provider service
-        kafkaProviderService.sendEvent(eventName, eventData);
+        kafkaProviderService.sendEvent(Event.builder().eventName(eventName).eventData(eventData).build());
 
         return "event was published";
     }

@@ -1,5 +1,7 @@
 package com.example.kafkaprovider.service;
 
+import com.example.kafkaprovider.model.Event;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +12,17 @@ import org.springframework.stereotype.Service;
 public class KafkaProviderService {
     private final Logger logger = LoggerFactory.getLogger(KafkaProviderService.class);
 
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private final String TOPIC = "event";
 
-    public void sendEvent(String eventName, String eventData) {
-        logger.info(String.format("Publish Event name: '%s' - Message: '%s'", eventName, eventData));
+    @Autowired
+    private KafkaTemplate<String, Event> kafkaTemplate;
+
+    public void sendEvent(Event event) {
+        logger.info(
+                String.format("Publish Event name: '%s' - Message: '%s'", event.getEventName(), event.getEventData()));
 
         // Publish event to Kafka
-        this.kafkaTemplate.send(eventName, eventData);
+        this.kafkaTemplate.send(TOPIC, event);
     }
 
 }
